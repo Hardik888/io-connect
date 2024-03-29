@@ -1,7 +1,15 @@
-import mongoose from "mongoose";
+import mongoose,{Document,Schema} from "mongoose";
 
-const messagesSchema = new mongoose.Schema({
-    sender: {
+export interface Imessage extends Document {
+    senderId:number,
+    receiverId:number,
+    groupId: number,
+    text: string,
+}
+
+
+const messagesSchema:Schema = new mongoose.Schema({
+    senderId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required:true
@@ -15,9 +23,13 @@ const messagesSchema = new mongoose.Schema({
         type: String,
         required:true
     },
-   
+    receiverId :{
+        type : mongoose.Schema.Types.ObjectId,
+        ref:'User',
+        required:true
+    }
 })
 
-const messsagesModel = mongoose.model('Message',messagesSchema);
+const messsagesModel = mongoose.model<Imessage>('Message',messagesSchema);
 
 export default messsagesModel;

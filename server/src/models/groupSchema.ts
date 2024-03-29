@@ -1,16 +1,27 @@
-import mongoose from "mongoose";
+import mongoose, { Schema ,Document} from "mongoose";
+import { Imessage } from "./messageSchema";
+export interface Igroup extends Document {
+    name: string,
+    users: mongoose.Types.ObjectId[]; // Array of user IDs
 
-const groupSchema = new mongoose.Schema ({
+    messages: Imessage[];
+}
+
+const groupSchema:Schema = new mongoose.Schema ({
     name: {
         type:String,
         required: true
     },
+    users: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     messages: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Message'
+      type:Schema.Types.ObjectId,
+      ref:'Message'
     }]
 })
 
-const groupModel = mongoose.model('groupSchema',groupSchema);
+const groupModel = mongoose.model<Igroup>('groupSchema',groupSchema);
 
 export  default groupModel;

@@ -1,16 +1,18 @@
-import userModel from "../../models/userSchema";
+import { Request,Response } from "express";
 
-const createUser = async (username:string) =>{
+import userModel ,{Iuser} from "../../models/userSchema";
 
-    try{
-        const user = new userModel({username});
+export const createUser = async (req: Request, res: Response) => {
+    try {
+        const { username } = req.body;
+        if (!username) {
+            return res.status(400).json({ message: 'Username is required' });
+        }
+        const user = new userModel({ username });
         await user.save();
-        console.log('user created',user);
-        return user;
-    }catch(error){
-        console.error('error',error);
-        throw error;
+        return res.status(201).json({ message: 'User created successfully', user });
+    } catch (error) {
+        console.error('Error creating user:', error);
+        return res.status(500).json({ message: 'Internal server error' });
     }
-}
-
-export default createUser;
+};

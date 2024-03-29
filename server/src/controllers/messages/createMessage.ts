@@ -1,14 +1,17 @@
-import messsagesModel from "../../models/messageSchema";
+import { Request,Response } from "express";
+import messsagesModel ,{Imessage} from "../../models/messageSchema";
 
-const createMessage = async (senderId:Number,groupId:Number,text:string)=>{
+export const createMessage = async (req: Request, res: Response) => {
     try {
-        const message = new messsagesModel({senderId,groupId,text});
+        const { senderId, receiverId, groupId, text } = req.body;
+        if (!senderId || !receiverId || !groupId || !text) {
+            return res.status(400).json({ message: 'Sender ID, receiver ID, group ID, and text are required' });
+        }
+        const message = new messsagesModel({ senderId, receiverId, groupId, text });
         await message.save();
-
-    }catch(error){
-        console.error('Error creating Message',error);
-        throw error;
+        return res.status(201).json({ message: 'Message created successfully' });
+    } catch (error) {
+        console.error('Error creating message:', error);
+        return res.status(500).json({ message: 'Internal server error' });
     }
-}
-
-export default createMessage;
+};
