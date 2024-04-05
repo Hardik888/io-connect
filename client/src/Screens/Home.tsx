@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { CreateGroup } from "../api/CreateGroup"; 
 import { fetchdata } from "../api/FetchData";
 import { addUserToGroup } from "../api/PostUserToGroup";
-function Home() {
+function Home(): React.JSX.Element {
 
   const [groups, setgroups] = useState<IGroup[]>([]);
   const [isaddingGroup, setisAddingGroup] = useState<boolean>(false);
