@@ -1,14 +1,20 @@
 import { Request,Response } from "express";
+import { config } from "dotenv";
+config();
+
+import * as argon2 from "argon2";
 
 import userModel ,{Iuser} from "../../models/userSchema";
 
 export const createUser = async (req: Request, res: Response) => {
     try {
-        const { username } = req.body;
-        if (!username) {
+        const { username ,password} = req.body;
+        if (!username && password) {
             return res.status(400).json({ message: 'Username is required' });
         }
-        const user = new userModel({ username });
+        const hashedpassword = await argon2.hash(password);
+
+        const user = new userModel({ username,password:hashedpassword});
         await user.save();
         return res.status(201).json({ message: 'User created successfully', user });
     } catch (error) {

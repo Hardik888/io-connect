@@ -3,7 +3,6 @@ import { Imessage } from "./messageSchema";
 export interface Igroup extends Document {
     name: string,
     users: mongoose.Types.ObjectId[]; // Array of user IDs
-
     messages: Imessage[];
 }
 
