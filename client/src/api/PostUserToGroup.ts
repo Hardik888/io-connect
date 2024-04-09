@@ -1,11 +1,11 @@
 
-
-export const addUserToGroup = async(groupId:string,userId:string[]) => {
+export const addUserToGroup = async(groupId:string,userId:string[],token:any) => {
 
 try {
     const response = await fetch('http://localhost:5000/addUserToGroup',{
         method:'Post',
         headers: {
+            'Authorization': `Bearer ${token}`,
     'Content-Type':'application/json'
         },
         body: JSON.stringify({

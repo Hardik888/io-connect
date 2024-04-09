@@ -1,12 +1,16 @@
-import "../App.css";
+import "./App.css";
 import IGroup from "../interface/Group";
 import Iuser from "../interface/User";
 import { socketConn } from "../socketSetup/socketConn";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CreateGroup } from "../api/CreateGroup"; 
 import { fetchdata } from "../api/FetchData";
 import { addUserToGroup } from "../api/PostUserToGroup";
+
+import { Appcontext } from '../Context';
 function Home(): React.JSX.Element {
+
+  const token = useContext(Appcontext);
 
   const [groups, setgroups] = useState<IGroup[]>([]);
   const [isaddingGroup, setisAddingGroup] = useState<boolean>(false);
@@ -17,9 +21,12 @@ function Home(): React.JSX.Element {
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const socket = socketConn();useEffect(()=>{},[socket])  
 
+  
+
+
   useEffect(() => {
     const fetchGroupsandUsers = async () => {
-      const { groupsfetchData, usersfetchData } = (await fetchdata()) as {
+      const { groupsfetchData, usersfetchData } = (await fetchdata(token)) as {
         groupsfetchData: any;
         usersfetchData: any;
       };
@@ -27,7 +34,7 @@ function Home(): React.JSX.Element {
       setAllUsers(usersfetchData);
     };
     fetchGroupsandUsers();
-  }, []);
+  }, [token]);
 
   const addgroups = async () => {
     try {
@@ -63,7 +70,7 @@ function Home(): React.JSX.Element {
       alert("Please select a group and users to add.");
       return;
     }
-    await addUserToGroup(selectedGroup, selectedUsers);
+    await addUserToGroup(selectedGroup, selectedUsers,token);
 
     setSelectedUsers([]);
     setIsAddingUsers(false);

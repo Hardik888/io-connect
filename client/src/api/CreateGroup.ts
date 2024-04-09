@@ -1,15 +1,21 @@
 import IGroup from "../interface/Group";
-
+import { Appcontext } from "../Context";
+import { useContext } from "react";
 export const CreateGroup = async (name: string): Promise<IGroup> => {
-    try {
+    const token = useContext(Appcontext);  
+  try {
       const response = await fetch('http://localhost:5000/groups/create', {
-        method: 'POST',
+        
+      method: 'POST',
+        
         headers: {
+          'Authentication' : `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           name: name
-        })
+        }),
+        
       });
   
       if (!response.ok) {
