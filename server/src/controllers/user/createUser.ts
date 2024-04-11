@@ -1,10 +1,11 @@
 import { Request,Response } from "express";
 import { config } from "dotenv";
-config();
-
 import * as argon2 from "argon2";
-
 import userModel ,{Iuser} from "../../models/userSchema";
+
+// Loading all the configs
+config(); 
+
 
 export const createUser = async (req: Request, res: Response) => {
     try {
