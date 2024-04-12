@@ -8,11 +8,11 @@ import { Appcontext } from './Context';
 
 const App = () => {
   const [token, setToken] = useState('');
+  const [userId,setuserId] = useState('');
+  
 
-  const handleToken = (token:any) => {
-    setToken(token);
-  };
-
+  
+ 
   const router = createBrowserRouter([
     {
       path: "/SignUp",
@@ -20,16 +20,19 @@ const App = () => {
     },
     {
       path: "/Login",
-      element: <LoginScreen ontoken={handleToken} />
+      element: <LoginScreen  onTokenChange={setToken} onUserIdchange={setuserId}/>
     },
     {
       path: "/Home",
-      element: token ? <Home /> : <LoginScreen ontoken={handleToken} /> // Render Home if token exists, otherwise render LoginScreen
+      
+      element: token ? <Home /> : <LoginScreen onTokenChange={setToken} onUserIdchange={setuserId}/> // Render Home if token exists, otherwise render LoginScreen
+
     }
+  
   ]);
 
   return (
-    <Appcontext.Provider value={token}>
+      <Appcontext.Provider value={{token,userId}}>
       <React.StrictMode>
         <RouterProvider router={router} />
       </React.StrictMode>

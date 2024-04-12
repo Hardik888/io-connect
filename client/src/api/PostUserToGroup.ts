@@ -1,6 +1,10 @@
+import { useContext } from "react";
+import { Appcontext } from "../Context";
 
-export const addUserToGroup = async(groupId:string,userId:string[],token:any) => {
 
+
+export const addUserToGroup = async(groupId:string,userId:string[]) => {
+const token = useContext(Appcontext);
 try {
     const response = await fetch('http://localhost:5000/addUserToGroup',{
         method:'Post',

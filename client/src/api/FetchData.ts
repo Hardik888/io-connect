@@ -1,37 +1,31 @@
+import { useContext } from "react";
+import { Appcontext } from "../Context";
 
-export const fetchdata = async (token:any) => {
+// Create a custom hook that uses other hooks appropriately
+export const useFetchData = () => {
+  const { token } = useContext(Appcontext);
 
-  try {
-    const groupresponse = await fetch('http://localhost:5000/getAllGroups', {
-      headers: {
-        'Authorization': `Bearer ${token}` // Include token in Authorization header
-      }
+  // Function to fetch groups
+  const fetchGroups = async () => {
+    const response = await fetch('http://localhost:5000/getAllGroups', {
+      headers: { 'Authorization': `Bearer ${token}` }
     });
-
-    if (!groupresponse.ok) {
+    if (!response.ok) {
       throw new Error('Failed to fetch groups');
     }
+    return response.json();
+  };
 
-    const Groupsdata = await groupresponse.json();
-
-    const userresponse = await fetch('http://localhost:5000/getusers', {
-      headers: {
-        'Authorization': `Bearer ${token}` // Include token in Authorization header
-      }
+  // Function to fetch users
+  const fetchUsers = async () => {
+    const response = await fetch('http://localhost:5000/getusers', {
+      headers: { 'Authorization': `Bearer ${token}` }
     });
-
-    if (!userresponse.ok) {
+    if (!response.ok) {
       throw new Error('Failed to fetch users');
     }
+    return response.json();
+  };
 
-    const Usersdata = await userresponse.json();
-
-    console.log(Groupsdata);
-    console.log(Usersdata);
-
-    return { groupsfetchData: Groupsdata, usersfetchData: Usersdata };
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error;
-  }
+  return { fetchGroups, fetchUsers };
 };
