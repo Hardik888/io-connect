@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useContext } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { io, Socket } from 'socket.io-client';
 
 export const useSocket = () => {
@@ -7,20 +7,24 @@ export const useSocket = () => {
 
     // Initialize socket connection
     useEffect(() => {
-        const newSocket = io("http://localhost:5000", { withCredentials: true });
-        setSocket(newSocket);
-        console.log("Socket initialized");
 
+        const newSocket = io("http://localhost:5000", { withCredentials: true });
+      
+        setSocket(newSocket);
+      
+        console.log("Socket initialized");
+      
         return () => {
             newSocket.disconnect();
             console.log("Socket disconnected");
-        };
-    }, []);
-
+        };}, []);
     // Function to emit the updated socket ID
     const updateSocketId = useCallback((userId:string) => {
-        if (socket) {
+    
+      if (socket) {
+
             socket.emit('updatedSocketId', userId);
+            
             console.log("Socket ID updated for user:", userId);
         }
     }, [socket]);

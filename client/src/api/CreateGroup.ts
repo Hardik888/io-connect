@@ -1,10 +1,8 @@
 import IGroup from "../interface/Group";
-import { Appcontext } from "../Context";
-import { useContext } from "react";
 
 
-export const CreateGroup = async (name: string): Promise<IGroup> => {
-  const {token,userId} = useContext(Appcontext);
+export const CreateGroup = async (name: string,token: string): Promise<IGroup> => {
+
   try {
       const response = await fetch('http://localhost:5000/groups/create', {
         
