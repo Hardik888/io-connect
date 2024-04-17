@@ -1,17 +1,22 @@
 // LoginScreen.jsx
 import React, { useState } from 'react';
-
+import {useSocket} from '../socketSetup/socketConn';
 import {fetchJwtToken }from '../Context';
 import { useNavigate } from "react-router-dom";
 
 import './loginStyles.css'; 
+type LoginScreenProps = {
+  onTokenChange: (token:string)=> void;
+  onUserIdchange: (userId:string) => void;
+
+}
 
 
-
-const LoginScreen = ({ontoken}:any) => {
+// const LoginScreen = ({ontoken}:any,{onuserId}:any) => {
+  const LoginScreen:React.FC<LoginScreenProps> =({onTokenChange,onUserIdchange})=>{
   const navigate = useNavigate();
 
- 
+    const {updateSocketId} = useSocket();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -27,14 +32,20 @@ const LoginScreen = ({ontoken}:any) => {
       return;
     }
 try {
-    const token = await fetchJwtToken(username,password);
-    ontoken(token);
-
+    const response = await fetchJwtToken(username,password);
+    if (response){
+    // ontoken(response.token);
+    // onuserId(response.userId);
+      onTokenChange(response.token);
+      onUserIdchange(response.userId);
+      updateSocketId(response.userId);
+      
       navigate('/Home');
- 
-    console.log(token);
-  }
+
+    }
+    }
   catch(error:any){
+    console.log(error);
     setErrorMessage(error);
   }
   };

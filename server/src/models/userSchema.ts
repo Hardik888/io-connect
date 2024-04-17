@@ -6,6 +6,7 @@ export interface Iuser extends Document {
 }
 
  const userSchema:Schema = new mongoose.Schema({
+
     username:{
         type: String,
         required : true
@@ -18,7 +19,8 @@ export interface Iuser extends Document {
         type: String,
         required: true,
     }
-})
+
+});
 
 const userModel = mongoose.model<Iuser>('User',userSchema);
 
